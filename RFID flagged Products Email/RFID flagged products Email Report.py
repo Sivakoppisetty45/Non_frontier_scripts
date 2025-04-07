@@ -73,7 +73,7 @@ def fetch_data_parallel(nrql_query, time_chunks):
             logger.info(f"Fetched {len(chunk_data)} events")
     return all_data
 
-def divide_time_range(start_time, end_time, chunk_size_minutes=5):
+def divide_time_range(start_time, end_time, chunk_size_minutes=1):
     """Divide the time range into smaller chunks with adjustable time intervals."""
     time_chunks = []
     current_time = start_time
