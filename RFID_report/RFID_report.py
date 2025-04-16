@@ -9,7 +9,6 @@ import concurrent.futures
 import time
 from dotenv import load_dotenv
 
-
 # Timezone for EST
 EST = pytz.timezone('US/Eastern')
 
@@ -20,6 +19,7 @@ API_KEY = os.getenv("NEW_RELIC_API_KEY")
 ACCOUNT = os.getenv("NEW_RELIC_ACCOUNT_ID")
 API_ENDPOINT = 'https://api.newrelic.com/graphql'
 
+# Setup logging
 logger = logging.getLogger('json_logger')
 logger.setLevel(logging.INFO)
 file_handler = logging.FileHandler('newrelic_data.log')
@@ -28,8 +28,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-
-# Retry decorator
+# Retry decorator for handling API call retries
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def fetch_data(nrql_query):
     """Fetch data from New Relic using NRQL."""
@@ -58,7 +57,7 @@ def fetch_data(nrql_query):
     return response.json()['data']['actor']['nrql']['results']
 
 
-# Parallel fetching function
+# Parallel fetching function to handle multiple time chunks
 def fetch_data_parallel(nrql_query, time_chunks):
     """Fetch data for multiple time chunks in parallel."""
     all_data = []
@@ -67,7 +66,7 @@ def fetch_data_parallel(nrql_query, time_chunks):
         futures = []
         for chunk_start, chunk_end in time_chunks:
             chunk_query = f"{nrql_query} SINCE '{chunk_start.strftime('%Y-%m-%d %H:%M:%S')}' UNTIL '{chunk_end.strftime('%Y-%m-%d %H:%M:%S')}'"
-            futures.append(executor.submit(fetch_data, chunk_query))  # Submit the fetch requests in parallel
+            futures.append(executor.submit(fetch_data, chunk_query))  # Submit fetch requests in parallel
 
         # Collect results as they complete
         for future in concurrent.futures.as_completed(futures):
@@ -77,7 +76,8 @@ def fetch_data_parallel(nrql_query, time_chunks):
     return all_data
 
 
-def divide_time_range(start_time, end_time, chunk_size_minutes=5):  # Adjusted to 5 minutes or another value
+# Function to divide the time range into smaller chunks
+def divide_time_range(start_time, end_time, chunk_size_minutes=5):
     """Divide the time range into smaller chunks with adjustable time intervals."""
     time_chunks = []
     current_time = start_time
@@ -90,6 +90,7 @@ def divide_time_range(start_time, end_time, chunk_size_minutes=5):  # Adjusted t
     return time_chunks
 
 
+# Extract data for a given time range using parallel fetching
 def extract_data(nrql_query, start_time, end_time):
     """Fetch data in chunks for the given time range using parallel fetching."""
     all_data = []
@@ -98,6 +99,8 @@ def extract_data(nrql_query, start_time, end_time):
     all_data = fetch_data_parallel(nrql_query, time_chunks)
     return all_data
 
+
+# Clean data by removing timestamp columns
 def remove_timestamp_columns(df):
     """Remove any timestamp-like columns."""
     for column in df.columns:
@@ -107,22 +110,21 @@ def remove_timestamp_columns(df):
                 logger.info(f"Removed column with timestamp data: {column}")
     return df
 
+
+# Reorder columns based on the query name
 def reorder_columns(df, query_name):
     """Reorder columns based on query type."""
-    # Define the correct column order for the 3rd and 4th queries
-    if query_name == "not-received-stores-low-accuracy":  # 3rd query
+    if query_name == "not-received-stores-low-accuracy":
         correct_order = ['sbu', 'store', 'accuracy', 'minimumAccuracy']
-    elif query_name == "not-received-stores-accepted-after-approval-time-limit":  # 4th query
+    elif query_name == "not-received-stores-accepted-after-approval-time-limit":
         correct_order = ['sbu', 'store', 'startDate', 'approvalDate']
     else:
-        # Default: use the current column order
         correct_order = df.columns.tolist()
-
-    # Reorder columns
     df = df[correct_order]
-
     return df
 
+
+# Save the extracted data to an Excel file
 def save_to_xlsx(data, query_name, local_dir, columns=None):
     """Save the extracted data to an Excel file with cleaned data."""
     if not os.path.exists(local_dir):
@@ -133,34 +135,21 @@ def save_to_xlsx(data, query_name, local_dir, columns=None):
         logger.info(f"No data found for query: {query_name}. Creating an empty file with a 'No Data Found' message.")
         df = pd.DataFrame([{'Message': 'No Data Found'}])
     else:
-        # Create DataFrame from data
         df = pd.DataFrame(data)
 
-        # If columns are provided, ensure the DataFrame has those columns
         if columns:
             df = df[columns]
 
-        # Remove timestamp columns
         df = remove_timestamp_columns(df)
-
-        # Reorder columns based on the query name
         df = reorder_columns(df, query_name)
 
-        # List of columns to check and convert to numeric
         numeric_columns = ['accuracy', 'minimumAccuracy', 'store']
-
         for col in numeric_columns:
             if col in df.columns:
-                # Remove any colons or special characters that might cause Excel to treat numbers as text
                 df[col] = df[col].astype(str).str.replace(":", "", regex=False)
-
-                # Convert the column to numeric (forces numbers to numeric format)
                 df[col] = pd.to_numeric(df[col], errors='coerce')
-
-                # Replace NaN values with 0 (no inplace)
                 df[col] = df[col].fillna(0)
 
-    # If columns are provided, reorder according to them, if necessary
     if columns:
         df = df[columns]
 
@@ -177,15 +166,14 @@ def save_to_xlsx(data, query_name, local_dir, columns=None):
     return file_path
 
 
-
+# Convert UTC datetime to EST
 def convert_to_est(dt):
     """Convert a datetime object to Eastern Standard Time (EST)."""
-    # Localize to UTC and then convert to EST
-    utc_time = pytz.utc.localize(dt)  # Make sure datetime is UTC first
-    return utc_time.astimezone(EST)  # Convert to EST
+    utc_time = pytz.utc.localize(dt)
+    return utc_time.astimezone(EST)
 
 
-
+# Get time range for the previous two days (day before yesterday and yesterday)
 def get_previous_days_time_range():
     """Calculate the time range for the day before yesterday and yesterday."""
     today = datetime.now(EST).date()
@@ -198,6 +186,7 @@ def get_previous_days_time_range():
     return start_time, end_time
 
 
+# Main function to execute the entire data extraction process
 if __name__ == '__main__':
     # Get time range (from 12:00 AM of the day before yesterday to 11:59 PM of yesterday)
     start_time, end_time = get_previous_days_time_range()
@@ -213,11 +202,10 @@ if __name__ == '__main__':
             "query_name": "received-stores",
             "columns": ['sbu', 'store']
         },
-
         {
             "nrql": f"FROM Log_RFID WITH APARSE(`message`, '[*:*] Successfully sent message to Tibco with sku count:%') AS (sbu, store)  SELECT sbu,store WHERE `entity.name` = 'Prod-rfid-cc-results-publisher' AND message LIKE '[%:%] Successfully sent message to Tibco with sku count:%' limit max  ORDER BY timestamp ASC",
             "query_name": "sent-to-pmm-stores",
-             "columns": ['sbu', 'store']
+            "columns": ['sbu', 'store']
         },
         {
             "nrql": f"FROM Log_RFID WITH APARSE(message, 'Received TV feedback notification for sbu: * %2.04.0004%\\\"siteCode\\\":\\\"*\\\",\\\"accuracy\\\"*,\\\"minimumAccuracy\\\":*}}%') AS (sbu, store, accuracy,minimumAccuracy) SELECT sbu, store, accuracy,minimumAccuracy WHERE `entity.name` = 'Prod-rfid-tv-feedback-subscriber' AND message LIKE 'Received TV feedback notification for sbu%2.04.0004%' limit max  ORDER BY timestamp ASC",
