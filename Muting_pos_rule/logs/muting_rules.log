@@ -1,0 +1,55 @@
+2025-07-30 12:03:34,604 - INFO - Starting muting rule automation process.
+2025-07-30 12:03:36,904 - INFO - Cleanup completed.
+2025-07-30 12:10:51,438 - INFO - Starting muting rule automation process.
+2025-07-30 12:10:53,090 - ERROR - Failed to fetch muting rules: 404 Client Error: Not Found for url: https://api.newrelic.com/v2/alerts_muting_rules.json
+2025-07-30 12:10:54,698 - INFO - Cleanup completed.
+2025-07-30 12:36:22,742 - INFO - Starting muting rule automation process.
+2025-07-30 12:36:24,869 - ERROR - Failed to fetch muting rules: 404 Client Error: Not Found for url: https://api.newrelic.com/v2/alerts_muting_rules.json
+2025-07-30 12:36:26,817 - INFO - 🔍 Found 0 existing muting rules.
+2025-07-30 12:36:26,817 - INFO - Cleanup completed.
+2025-07-30 12:36:28,532 - INFO - ✅ Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:36:28,533 - INFO - ✅ Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:36:30,257 - INFO - ✅ Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:36:30,258 - INFO - ✅ Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:36:30,258 - INFO - Muting rule automation completed successfully.
+2025-07-30 12:49:00,520 - INFO - Starting muting rule automation process.
+2025-07-30 12:49:02,589 - INFO - Cleanup completed.
+2025-07-30 12:49:04,223 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:49:05,702 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:49:05,702 - INFO - Muting rule automation completed successfully.
+2025-07-30 12:51:24,684 - INFO - Starting muting rule automation process.
+2025-07-30 12:51:28,052 - INFO - Found 6 existing muting rules.
+2025-07-30 12:51:28,052 - INFO - Cleanup completed.
+2025-07-30 12:51:29,801 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:51:29,801 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:51:32,051 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:51:32,052 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:51:32,052 - INFO - Muting rule automation completed successfully.
+2025-07-30 12:59:28,545 - INFO - Starting muting rule automation process.
+2025-07-30 12:59:30,786 - INFO - Found 8 existing muting rules.
+2025-07-30 12:59:30,787 - INFO -  Preparing to delete rule: AutoMute - 1 Tuesday - 2025-08-05 (ID: 69668401)
+2025-07-30 12:59:33,328 - ERROR - Failed to delete rule AutoMute - 1 Tuesday - 2025-08-05 (ID: 69668401): [{'message': 'Cannot query field "name" on type "AlertsMutingRuleDeleteResponse".', 'locations': [{'line': 5, 'column': 9}]}]
+2025-07-30 12:59:33,329 - INFO -  Preparing to delete rule: AutoMute - 2 Tuesday - 2025-08-19 (ID: 69668404)
+2025-07-30 12:59:35,850 - ERROR - Failed to delete rule AutoMute - 2 Tuesday - 2025-08-19 (ID: 69668404): [{'message': 'Cannot query field "name" on type "AlertsMutingRuleDeleteResponse".', 'locations': [{'line': 5, 'column': 9}]}]
+2025-07-30 12:59:35,851 - INFO - Cleanup completed.
+2025-07-30 12:59:38,151 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:59:38,152 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 12:59:40,397 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:59:40,398 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 12:59:40,398 - INFO - Muting rule automation completed successfully.
+2025-07-30 13:32:13,759 - INFO - Starting muting rule automation process.
+2025-07-30 13:32:15,181 - INFO - Found 6 existing muting rules.
+2025-07-30 13:32:15,182 - INFO - Cleanup completed.
+2025-07-30 13:32:16,323 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 13:32:16,324 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-07-30 13:32:17,550 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 13:32:17,550 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-07-30 13:32:17,550 - INFO - Muting rule automation completed successfully.
+2025-08-01 14:15:05,147 - INFO - Starting muting rule automation process.
+2025-08-01 14:15:06,746 - INFO - Found 6 existing muting rules.
+2025-08-01 14:15:06,746 - INFO - Cleanup completed.
+2025-08-01 14:15:07,895 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-08-01 14:15:07,896 - INFO - Created Muting Rule: AutoMute - 1 Tuesday - 2025-08-05
+2025-08-01 14:15:09,043 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-08-01 14:15:09,043 - INFO - Created Muting Rule: AutoMute - 2 Tuesday - 2025-08-19
+2025-08-01 14:15:09,043 - INFO - Muting rule automation completed successfully.

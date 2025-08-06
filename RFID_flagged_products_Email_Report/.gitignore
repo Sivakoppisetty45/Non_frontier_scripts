@@ -1,0 +1,24 @@
+cat <<EOF > .gitignore
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Logs and outputs
+logs/
+export/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+EOF
