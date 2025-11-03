@@ -47,6 +47,6 @@ def create_muting_rule(name, start_utc, end_utc):
         if "errors" in data:
             logger.error(f" Error creating muting rule {name}: {data['errors']}")
         else:
-            logger.info(f"Created Muting Rule: {name}")
+            logger.info(f"aCreated Muting Rule: {name}")
     except Exception as e:
         logger.error(f"Failed to create muting rule {name}: {e}")
